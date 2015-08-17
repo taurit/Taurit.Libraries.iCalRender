@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>iCalRender sample</title>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <div id="renderedDay1">
+        <!-- Placeholder for contents of rendered single day -->
+    </div>
+
+    <script src="Scripts/jquery-2.1.4.js"></script>
+    <script src="Scripts/ical.js"></script>
+    <script src="Scripts/iCalRender.js"></script>
+    <script type="text/javascript">
+        /// <reference path="Scripts/jquery-2.1.4.js" />
+
+        
+        $.get("http://localhost:49762/samples/google_birthday.ics", function (response) {
+            fileContent = response;
+
+            var renderer = new ICalRender.Renderer(fileContent);
+            var renderCode = renderer.RenderDay(2014, 10, 12); // google_birthday.ics has an event on 2014-12-10
+            jQuery("#renderedDay1").append(renderCode);
+
+        });
+        
+    </script>
+</body>
+</html>
