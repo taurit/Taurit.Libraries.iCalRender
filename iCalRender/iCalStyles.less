@@ -1,0 +1,81 @@
+﻿// Minimal sample styles for iCalRender.
+//
+// Depending on your requirements you can:
+// * configure it to match your website color scheme,
+// * replace it completely by your own LESS or CSS styles
+// * override selected styles
+
+// Configuration
+@eventBackgroundColor: #3d9970;
+@eventBorderColor: @eventBackgroundColor;
+@eventTextColor: contrast(@eventBackgroundColor);
+@eventMarginBottom: 3px;
+@eventPadding: 3px 5px 3px 5px;
+@eventBorderRadius: 2px;
+
+@allDayEventsBoxHeight: 80px;
+@scheduledEventsBoxHeight: 400px;
+
+@allDayEventsDividerHeight: 16px;
+@allDayEventsDividerColor: #dcdcdc;
+
+@gridHourHeight: 40px;
+
+// Styles definition
+.icalrender {
+    .month {
+    }
+
+    .week {
+    }
+
+    .day {
+        .all-day-events {
+            max-height: @allDayEventsBoxHeight;
+            overflow-y: scroll;
+        }
+
+        .all-day-events-divider {
+            margin-top: @allDayEventsDividerHeight/2;
+            margin-bottom: @allDayEventsDividerHeight/2;
+            height: 1px;
+            background-color: @allDayEventsDividerColor;
+        }
+
+        .scheduled-events {
+            max-height: @scheduledEventsBoxHeight;
+            overflow-y:scroll;
+            overflow-x: hidden;
+            position: relative;
+            // Events that have a start and end time set should be displayed on a time-grid representing time intervals during the day
+            & > .time-grid {
+                z-index: 10;
+
+                & > .time-grid-line {
+                    background-color: #ededed;
+                    height: 1px;
+                    margin-top: @gridHourHeight;
+                }
+            }
+
+            .event {
+                //position: absolute;
+                //top: (@gridHourHeight + 1px)*4;
+                overflow: hidden;
+
+            }
+        }
+
+        .event {
+            background-color: @eventBackgroundColor;
+            border: 1px solid @eventBorderColor;
+            color: @eventTextColor;
+            margin-bottom: @eventMarginBottom;
+            padding: @eventPadding;
+            border-radius: @eventBorderRadius;
+            font-weight: bold;
+
+            box-sizing: border-box;
+        }
+    }
+}

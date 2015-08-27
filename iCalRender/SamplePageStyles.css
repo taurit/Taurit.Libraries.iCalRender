@@ -1,0 +1,7 @@
+﻿body {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 12px;
+}
+body .day {
+  width: 200px;
+}

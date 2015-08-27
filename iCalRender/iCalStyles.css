@@ -1,0 +1,37 @@
+﻿.icalrender .day .all-day-events {
+  max-height: 80px;
+  overflow-y: scroll;
+}
+.icalrender .day .all-day-events-divider {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  height: 1px;
+  background-color: #dcdcdc;
+}
+.icalrender .day .scheduled-events {
+  max-height: 400px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: relative;
+}
+.icalrender .day .scheduled-events > .time-grid {
+  z-index: 10;
+}
+.icalrender .day .scheduled-events > .time-grid > .time-grid-line {
+  background-color: #ededed;
+  height: 1px;
+  margin-top: 40px;
+}
+.icalrender .day .scheduled-events .event {
+  overflow: hidden;
+}
+.icalrender .day .event {
+  background-color: #3d9970;
+  border: 1px solid #3d9970;
+  color: #ffffff;
+  margin-bottom: 3px;
+  padding: 3px 5px 3px 5px;
+  border-radius: 2px;
+  font-weight: bold;
+  box-sizing: border-box;
+}

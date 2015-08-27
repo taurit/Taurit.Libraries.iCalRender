@@ -1,0 +1,10 @@
+﻿[
+  {
+    "outputFile": "iCalStyles.css",
+    "inputFile": "iCalStyles.less"
+  },
+  {
+    "outputFile": "SamplePageStyles.css",
+    "inputFile": "SamplePageStyles.less"
+  }
+]
