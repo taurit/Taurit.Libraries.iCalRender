@@ -1,25 +1,56 @@
 var gulp = require('gulp');
 var less = require('gulp-less');
 var jshint = require('gulp-jshint');
-var jscs = require('gulp-jscs');
-var print = require('gulp-print');
+var cssmin = require('gulp-cssmin');
+var rename = require('gulp-rename');
+var uglify = require('gulp-uglify');
+var concat = require('gulp-concat');
+var stripDebug = require('gulp-strip-debug');
+var es = require('event-stream');
 
-gulp.task('styles', function () {
-    return gulp.src(['SamplePageStyles.less', 'iCalStyles.less'])
+gulp.task('libStyles', function () {
+    return gulp.src(['Styles/iCalStyles.less'])
       .pipe(less())
-      .pipe(gulp.dest('.'));
+      .pipe(cssmin())
+      .pipe(rename({ suffix: '.min' }))
+      .pipe(gulp.dest('./build'));
 });
 
-gulp.task('vet', function () {
-    return gulp.src(['Scripts/iCalRender.js'])
-      .pipe(print())
-    //.pipe(jscs())
+
+gulp.task('exampleStyles', function () {
+    return gulp.src(['Examples/Examples.less'])
+      .pipe(less())
+      .pipe(cssmin())
+      .pipe(rename({ suffix: '.min' }))
+      .pipe(gulp.dest('./Examples'));
+});
+
+gulp.task('libScripts', function () {
+    return es.merge(
+        gulp.src(['lib/ical.js']).pipe(uglify()).pipe(rename({ suffix: '.min' })).pipe(gulp.dest('./build')),
+        gulp.src(['lib/jquery-2.1.4.min.js']).pipe(gulp.dest('./build')),
+        gulp.src(['Scripts/iCalRender.Header.js', 'Scripts/iCalRender.Functions.js', 'Scripts/iCalRender.ExtendedEvent.js', 'Scripts/iCalRender.EventPositionCalculator.js', 'Scripts/iCalRender.Renderer.js'])
+          .pipe(concat('icalrender.js'))
+          .pipe(stripDebug())
+          .pipe(uglify())
+          .pipe(rename({ suffix: '.min' }))
+          .pipe(gulp.dest('./build'))
+      );
+});
+
+
+gulp.task('validate', function () {
+    return gulp.src(['Scripts/*.js'])
       .pipe(jshint())
       .pipe(jshint.reporter('jshint-stylish', { 'verbose': true }))
       .pipe(jshint.reporter('fail'));
 });
 
 gulp.task('watch', function () {
-    gulp.watch(['SamplePageStyles.less', 'iCalStyles.less'], ['styles']);
-    gulp.watch(['Scripts/iCalRender.js'], ['vet']);
+    // library assets
+    gulp.watch(['Scripts/*.js'], ['validate', 'libScripts']);
+    gulp.watch(['Styles/iCalStyles.less'], ['libStyles']);
+
+    // sample page assets
+    gulp.watch(['Examples/Examples.less'], ['exampleStyles']);
 });

@@ -66,51 +66,33 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Examples\Example-minimum-offline.html" />
     <Content Include="gulpfile.js" />
-    <Content Include="iCalStyles.css">
-      <DependentUpon>iCalStyles.less</DependentUpon>
-    </Content>
-    <Content Include="iCalStyles.min.css">
-      <DependentUpon>iCalStyles.css</DependentUpon>
-    </Content>
     <Content Include="packages.config" />
-    <Content Include="SamplePageStyles.css">
-      <DependentUpon>SamplePageStyles.less</DependentUpon>
-    </Content>
-    <Content Include="SamplePageStyles.min.css">
-      <DependentUpon>SamplePageStyles.css</DependentUpon>
-    </Content>
-    <Content Include="samples\google_birthday.ics" />
-    <Content Include="samples\minimal.ics" />
-    <Content Include="samples\recur_instances.ics" />
-    <Content Include="Scripts\i18next-1.8.0.js" />
-    <Content Include="Scripts\i18next-1.8.0.min.js" />
-    <Content Include="Scripts\jquery-2.1.4.min.map" />
-    <Content Include="locales\es\translation.json" />
-    <Content Include="samples\Cal-2015-08-22.ics" />
-    <Content Include="iCalStyles.less" />
-    <None Include="compilerconfig.json" />
-    <Content Include="SamplePageStyles.less" />
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
+    <Content Include="Examples\Examples.min.css" />
+    <Content Include="lib\jquery-2.1.4.min.map" />
+    <Content Include="Examples\Cal-2015-08-22.ics" />
+    <Content Include="Scripts\iCalRender.EventPositionCalculator.js" />
+    <Content Include="Scripts\iCalRender.ExtendedEvent.js" />
+    <Content Include="Scripts\iCalRender.Functions.js" />
+    <Content Include="Scripts\iCalRender.Header.js" />
+    <Content Include="Styles\iCalStyles.less" />
+    <Content Include="Examples\Examples.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="index.html" />
-    <Content Include="Scripts\ical.js" />
-    <Content Include="Scripts\iCalRender.js" />
-    <Content Include="license.txt" />
-    <None Include="Scripts\jquery-2.1.4.intellisense.js" />
-    <Content Include="Scripts\jquery-2.1.4.js" />
-    <Content Include="Scripts\jquery-2.1.4.min.js" />
-    <Content Include="Scripts\EventPositionCalculator.js" />
+    <Content Include="Examples\Examples.html" />
+    <Content Include="lib\ical.js" />
+    <Content Include="Scripts\iCalRender.Renderer.js" />
+    <None Include="lib\jquery-2.1.4.intellisense.js" />
+    <Content Include="lib\jquery-2.1.4.js" />
+    <Content Include="lib\jquery-2.1.4.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="build\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

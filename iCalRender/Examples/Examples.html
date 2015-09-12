@@ -6,10 +6,10 @@
     <meta charset="utf-8" />
 
     <!-- Stylesheet for a library, must me attached or replaced by similar stylesheet: -->
-    <link href="iCalStyles.css" rel="stylesheet" />
+    <link href="../build/iCalStyles.min.css" rel="stylesheet" />
 
     <!-- Stylesheet for a demo page, unimportant: -->
-    <link href="SamplePageStyles.css" rel="stylesheet" />
+    <link href="Examples.min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -40,18 +40,18 @@
         </ul>
     </div>
 
-    <script src="Scripts/ical.js"></script>
-    <script src="Scripts/EventPositionCalculator.js"></script>
-    <script src="Scripts/iCalRender.js"></script>
-    <script src="Scripts/jquery-2.1.4.js"></script>
+    <script src="../build/ical.min.js"></script>
+    <script src="../build/jquery-2.1.4.min.js"></script>
+    <script src="../build/icalrender.min.js"></script>
+    
     <script type="text/javascript">
         /// <reference path="Scripts/jquery-2.1.4.js" />
         
-        $.get("http://localhost:49762/samples/Cal-2015-08-22.ics", function (response) {
+        $.get("http://localhost:49762/Examples/Cal-2015-08-22.ics", function (response) {
             var fileContent = response;
             
-            // example: view for hours 10:00-19:00
-            var renderer = new ICalRender.Renderer(fileContent, 10, 19, 52);
+            // example: view for hours 10:00-16:00
+            var renderer = new ICalRender.Renderer(fileContent, 10, 16, 52);
             renderer.RenderMultidayView("#one-day", 2015, 8, 22);
 
             // example: views for hours 08:00-22:00
@@ -61,7 +61,7 @@
 
           
         });
-
+         
     </script>
 </body>
 

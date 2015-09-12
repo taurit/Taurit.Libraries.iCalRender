@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>iCalRender - minimum example (offline)</title>
+    <meta charset="utf-8" />
+
+    <!-- Attach default styles -->
+    <link href="../build/iCalStyles.min.css" rel="stylesheet" />
+
+    <!-- Simple styles for container -->
+    <style type="text/css">
+        #one-day {
+            font-family: Tahoma, Geneva, Verdana, sans-serif;
+            width: 300px;
+            height: 400px;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Create container where calendar should be rendered -->
+    <div class="icalrender">
+        <div id="one-day"></div>
+    </div>
+
+    <!-- Attach required JS files -->
+    <script src="../build/ical.min.js"></script>
+    <script src="../build/jquery-2.1.4.min.js"></script>
+    <script src="../build/icalrender.min.js"></script>
+
+    <!-- Initialize iCalRender -->
+    <script type="text/javascript">
+        var vCalendarContent = 'BEGIN:VCALENDAR\n\
+BEGIN:VEVENT\n\
+SUMMARY:AllDayEvent #1/1\n\
+DTSTART;VALUE=DATE:20150822\n\
+DTEND;VALUE=DATE:20150823\n\
+END:VEVENT\n\
+BEGIN:VEVENT\n\
+SUMMARY:Event #1: 13:00-16:00\n\
+DTSTART;TZID=Europe/Warsaw:20150822T130000\n\
+DTEND;TZID=Europe/Warsaw:20150822T160000\n\
+END:VEVENT\n\
+BEGIN:VEVENT\n\
+SUMMARY:Event #2: 14:00-15:30\n\
+DTSTART;TZID=Europe/Warsaw:20150822T140000\n\
+DTEND;TZID=Europe/Warsaw:20150822T153000\n\
+END:VEVENT\n\
+END:VCALENDAR\n\
+';
+
+        var renderer = new ICalRender.Renderer(vCalendarContent, 12, 16, 52);
+        renderer.RenderMultidayView("#one-day", 2015, 8, 22);
+    </script>
+</body>
+</html>

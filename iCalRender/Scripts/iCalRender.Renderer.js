@@ -1,103 +1,14 @@
-﻿/// <reference path="ical.js" />
-/// <reference path="jquery-2.1.4.js" />
-/// <reference path="EventPositionCalculator.js" />
-
-/**
- * iCalRender
- * 
- * Renders iCalendar-compatible file into HTML entirely on a client side (JavaScript).
- * Use ical.js for parsing: https://github.com/mozilla-comm/ical.js/
- * ical.js usage example: https://jsfiddle.net/kewisch/227efboL/
- * 
- * Visual Studio 2015 or newer with Web Essentials plugin is recommended to develop this solution.
- * 
- * Author: taurit
- * URL (1): http://icalrender.taurit.pl
- * URL (2): https://github.com/taurit/iCalRender
- * Version: 0.1
- * 
- */
+﻿/// <reference path="../lib/ical.js" />
+/// <reference path="../lib/jquery-2.1.4.js" />
+/// <reference path="iCalRender.Header.js" />
+/// <reference path="iCalRender.Functions.js" />
+/// <reference path="iCalRender.ExtendedEvent.js" />
+/// <reference path="iCalRender.EventPositionCalculator.js" />
 
 (function () {
     "use strict";
 
-    function filterEventsToParticularDay(iteratedDay) {
-        /// <param name="el" type="ICAL.Event">Single event</param>
 
-        return function (el) {
-            var startDate = new Date(el.startDate);
-            var endDate = new Date(el.endDate);
-
-            var matchesFilter = startDate.getFullYear() === iteratedDay.getFullYear() &&
-                startDate.getMonth() === iteratedDay.getMonth() &&
-                startDate.getDate() === iteratedDay.getDate() &&
-                !(startDate.getUTCHours() === 0 && endDate.getDate() !== iteratedDay.getDate()); // make sure that event starts and ends in the same day
-            return matchesFilter; // todo: insert date condition here
-        };
-    }
-    function filterEventsToTimeWindow(iteratedDay, startHour, endHour) {
-        return function (el) {
-            // limit events to those that happen in a time-window specified by user
-            /// <param name="el" type="ICAL.Event">Single event</param>
-
-            var extEv = new ICalRender.ExtendedEvent(el);
-            var startHourFullDate = new Date(iteratedDay.getFullYear(), iteratedDay.getMonth(), iteratedDay.getDate(), startHour, 0, 0, 0);
-            var endHourFullDate = new Date(iteratedDay.getFullYear(), iteratedDay.getMonth(), iteratedDay.getDate(), endHour, 0, 0, 0);
-
-            return extEv.overlapsWithTimeRange(startHourFullDate, endHourFullDate);
-        };
-    }
-    function filterEventsToAllDayEvents(iteratedDay) {
-
-        return function (el) {
-            /// <param name="el" type="ICAL.Event">Single event</param>
-
-            var startDate = new Date(el.startDate);
-            var endDate = new Date(el.endDate);
-
-            var matchesFilter = startDate.getFullYear() === iteratedDay.getFullYear() &&
-                startDate.getMonth() === iteratedDay.getMonth() && // js starts month from 0 
-                startDate.getDate() === iteratedDay.getDate() &&
-                startDate.getUTCHours() === 0 &&
-                endDate.getDate() !== iteratedDay.getDate();
-            return matchesFilter;
-        };
-    }
-
-    function funAddEventToContainer(allDayEventsContainer, dayNum) {
-        return function (singleEvent) {
-            /// <param name="singleEvent" type="ICAL.Event">Single event</param>
-            $("<div/>", {
-                "class": "event all-day-event",
-                "data-day": dayNum,
-                "text": singleEvent.summary,
-                "title": singleEvent.summary
-            }).appendTo(allDayEventsContainer);
-        };
-    }
-
-    function funAddScheduledEventToContainer(scheduledEventsContainer, dayNum) {
-        return function (singleEvent) {
-            /// <param name="singleEvent" type="ICalRender.ExtendedEvent">Single event with calculated position parameters</param>
-
-            var startDate = new Date(singleEvent.basicEvent.startDate);
-            var endDate = new Date(singleEvent.basicEvent.endDate);
-            var startTotalMinutes = startDate.getHours() * 60 + startDate.getMinutes();
-            var durationMin = (endDate - startDate) / (60 * 1000);
-
-            var renderedEvent = $("<div />", {
-                "class": "event scheduled-event",
-                "data-starttotalminutes": startTotalMinutes,
-                "data-duration": durationMin,
-                "data-numevents": singleEvent.eventPosition.neighbourEvents,
-                "data-eventord": singleEvent.eventPosition.eventIndent,
-                "data-day": dayNum,
-                "title": singleEvent.basicEvent.summary,
-                "text": singleEvent.basicEvent.summary
-            }).appendTo(scheduledEventsContainer);
-
-        };
-    }
     /**
      * Initialize renderer with a given calendar
      * 
@@ -129,7 +40,6 @@
         }
         this.allDayEventsSectionHeightPx = allDayEventsSectionHeightPx;
 
-
         var parsedCalendar = ICAL.parse(this.fileContent);
 
         if (parsedCalendar) {
@@ -149,20 +59,53 @@
 
     ICalRender.Renderer.prototype = {
 
-        /**
-         * Renders a specified number of days in a multi-day view and returns HTML code that can be put in a container like <div></div>.
-         * Inserts the generated code to a given container.
-         * Resulting HTML code might require some repositioning of elements with RealignDays() function, which is automatically
-         * executed and attached to window resize event.
-         *
-         * @param {number} [year] Year
-         * @param {number} [month] Month, January = 1, February = 2, ...
-         * @param {number} [day] Day to render, indexing start with 1
-         * @param {number} [numDays] Number of days to render, if ommited 1 is used as default value
-         * 
-         * @returns {string} Rendered HTML code
-         */
+        getFunAddEventToContainer: function (allDayEventsContainer, dayNum) {
+
+            return function (singleEvent) {
+                /// <param name="singleEvent" type="ICAL.Event">Single event</param>
+                $("<div/>", {
+                    "class": "event all-day-event",
+                    "data-day": dayNum,
+                    "text": singleEvent.summary,
+                    "title": singleEvent.summary
+                }).appendTo(allDayEventsContainer);
+            };
+        },
+
+        getFunAddScheduledEventToContainer: function (scheduledEventsContainer, dayNum) {
+            return function (singleEvent) {
+                /// <param name="singleEvent" type="ICalRender.ExtendedEvent">Single event with calculated position parameters</param>
+
+                var startDate = new Date(singleEvent.basicEvent.startDate);
+                var endDate = new Date(singleEvent.basicEvent.endDate);
+                var startTotalMinutes = startDate.getHours() * 60 + startDate.getMinutes();
+                var durationMin = (endDate - startDate) / (60 * 1000);
+
+                var renderedEvent = $("<div />", {
+                    "class": "event scheduled-event",
+                    "data-starttotalminutes": startTotalMinutes,
+                    "data-duration": durationMin,
+                    "data-numevents": singleEvent.eventPosition.neighbourEvents,
+                    "data-eventord": singleEvent.eventPosition.eventIndent,
+                    "data-day": dayNum,
+                    "title": singleEvent.basicEvent.summary,
+                    "text": singleEvent.basicEvent.summary
+                }).appendTo(scheduledEventsContainer);
+
+            };
+        },
+
         RenderMultidayView: function (jQuerySelectorPlaceholder, year, month, day, numDays) {
+            /// <summary>
+            /// Renders a specified number of days in a multi-day view in a container defined by jQuery selector.
+            /// 
+            /// Resulting HTML code requires calculation of position of elements with RealignDays() function, which is automatically executed and attached to window resize event. 
+            /// </summary>
+            /// <param type="Number" name="year">Year</param>
+            /// <param type="Number" name="month">Month, January = 1, February = 2, ...</param>
+            /// <param type="Number" name="day">Day to render, indexing start with 1</param>
+            /// <param type="Number" name="numDays">Number of days to render, if ommited 1 is used as default value</param>
+
             // sanitize parameters
             if (!numDays) {
                 numDays = 1;
@@ -171,7 +114,7 @@
             var renderer = this;
 
             // generate markup for requested view 
-            var result = this.RenderDaysInternal(year, month, day, numDays, jQuerySelectorPlaceholder);
+            this.RenderDaysInternal(year, month, day, numDays, jQuerySelectorPlaceholder);
 
             // put the markup containing calendar data into container specified by user
             jQuery(jQuerySelectorPlaceholder).addClass('days');
@@ -186,13 +129,8 @@
 
         },
 
-        /**
-         * @param {number} [daysInWeek] Number of days if the day is to be rendered in a week-like view. Default is 1.
-         * @param {number} [dayInWeek] Ordinal number of day if the day is to be rendered in a week-like view. Default is 0.
-         * 
-         * @returns HTML content of a container for a day
-         */
         RenderDaysInternal: function (year, month, day, numDays, jQuerySelectorPlaceholder) {
+            /// <summary>Builds DOM tree containing calendar items like headers, time grid, labels, event and puts the elements into container specified by jQuery selector parameter</summary>
 
             // find events that take place this day
             var renderer = this;
@@ -249,37 +187,36 @@
                     "text": days[iteratedDay.getDay()] + ", " + iteratedDay.toLocaleDateString()
                 }).appendTo(headersContainer);
 
-                var filterDay = filterEventsToParticularDay(iteratedDay);
-                var filterTimeWindow = filterEventsToTimeWindow(iteratedDay, renderer.startHour, renderer.endHour);
-                var thisDayEvents = this.parsedCalendarEvents.filter(filterDay).filter(filterTimeWindow);
-
-                var filterAllDayEvents = filterEventsToAllDayEvents(iteratedDay);
+                var filterAllDayEvents = ICalRender.Filters.filterEventsToAllDayEvents(iteratedDay);
                 var thisDayAllDayEvents = this.parsedCalendarEvents.filter(filterAllDayEvents);
 
-                var addEventToContainer = funAddEventToContainer(allDayEventsContainer, dayNum);
-                thisDayAllDayEvents.forEach(addEventToContainer);
+                var filterDay = ICalRender.Filters.filterEventsToParticularDayEvents(iteratedDay);
+                var filterTimeWindow = ICalRender.Filters.filterEventsToTimeWindow(iteratedDay, renderer.startHour, renderer.endHour);
+                var thisDayEvents = this.parsedCalendarEvents.filter(filterDay).filter(filterTimeWindow);
 
+                var funAddEventToContainer = this.getFunAddEventToContainer(allDayEventsContainer, dayNum);
+                thisDayAllDayEvents.forEach(funAddEventToContainer);
 
                 var eventPosCalc = new ICalRender.EventPositionCalculator(thisDayEvents);
                 thisDayEvents = eventPosCalc.getEvents();
 
-                var addScheduledEventToContainer = funAddScheduledEventToContainer(scheduledEventsContainer, dayNum);
-                thisDayEvents.forEach(addScheduledEventToContainer);
+                var funAddScheduledEventToContainer = this.getFunAddScheduledEventToContainer(scheduledEventsContainer, dayNum);
+                thisDayEvents.forEach(funAddScheduledEventToContainer);
 
                 iteratedDay = iteratedDay.addDays(1);
             }
         },
 
-        /**
-         * Calculates new position for events (that have to be positioned absolutely) and apply them. Includes calculation of:
-         * - width
-         * - height
-         * - top position
-         * - left position
-         * 
-         * @param {string} [containerSelector] jQuery selector targeting container where re-aligning should take place
-         */
+        
         RealignDays: function (containerSelector) {
+            /// <summary>
+            ///  Calculates new position for events (that have to be positioned absolutely) and apply them. Includes calculation of:
+            ///  - width
+            ///  - height
+            ///  - top position
+            ///  - left position
+            /// </summary>
+            /// <param type="String" name="containerSelector">jQuery selector targeting container where re-aligning should take place</param>
             var renderer = this;
 
             // read container size
@@ -292,7 +229,7 @@
             var hourHeightPx = 40; // todo: make customizable
             var hourBorderThicknessPx = 1; // todo: make customizable
             var daySpacingPx = containerNumDays == 1 ? 0 : 5; // for single day view spacing in unnecessary and not desired
-            var topShiftPx = 5; // same as in LESS
+            var topShiftPx = 5; // should be the same as in LESS
             var marginForHourLabelPx = 20; // space on the left side of the container dedicated for hour labels only
             var allDayEventHeight = 22;
 
@@ -378,6 +315,7 @@
                 $(this).css('top', topPositionPx + 'px');
 
             });
+
             container.find(".time-grid-line").each(function () {
                 var hour = $(this).data('hournumber');
                 var topMargin = (hourHeightPx);
@@ -385,13 +323,12 @@
 
             });
 
-
             container.find(".scheduled-events").each(function () {
                 $(this).height(spaceLeft);
             });
 
-
         },
     };
+
 })();
 
