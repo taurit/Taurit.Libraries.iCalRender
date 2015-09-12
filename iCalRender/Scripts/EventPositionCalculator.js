@@ -13,6 +13,13 @@
 // Namespace available globally
 ICalRender = {};
 
+Date.prototype.addDays = function (days) {
+    var dat = new Date(this.valueOf());
+    dat.setDate(dat.getDate() + days);
+    return dat;
+
+};
+
 ICalRender.EventPosition = function () {
     /// <field type='Number' name='eventIndent'>Level of indent of given event in rendered calendar. Start from 0 (for events that should take full width of a container).</field>
     /// <field type='Number' name='neighbourEvents'>Number of events to share width with (1 = this single event can take full width of a container)</field>
@@ -41,10 +48,17 @@ ICalRender.ExtendedEvent = function (basicEvent) {
 }
 
 ICalRender.ExtendedEvent.prototype = {
+    overlapsWithTimeRange: function(timeRangeStart, timeRangeEnd) {
+        // <param name="timeRangeStart" type="Date">Start of a time range to compare event with</param>
+        // <param name="timeRangeEnd" type="Date">End of a time range to compare event with</param>
+
+        return ((this.startDate < timeRangeEnd) && (this.endDate > timeRangeStart));
+    },
+
     overlaps: function (anotherEvent) {
         /// <param name="anotherEvent" type="ICalRender.ExtendedEvent">Extended event object</param>
 
-        return (this.startDate < anotherEvent.endDate) && (this.endDate > anotherEvent.startDate);
+        return ((this.startDate < anotherEvent.endDate) && (this.endDate > anotherEvent.startDate));
     },
 
     overlapsWithAny: function (anotherEvents) {

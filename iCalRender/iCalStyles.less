@@ -6,76 +6,91 @@
 // * override selected styles
 
 // Configuration
-@eventBackgroundColor: #3d9970;
-@eventBorderColor: @eventBackgroundColor;
-@eventTextColor: contrast(@eventBackgroundColor);
-@eventMarginBottom: 3px;
+@generalFontSize: 13px; // font size for elements inside .icalrenderer
+
+@eventBackgroundColor: color(#29AEE1); // background color for both all-day events and events having specific time assigned
+@eventTextColor: contrast(@eventBackgroundColor); // text color for event labels
 @eventPadding: 3px 5px 3px 5px;
-@eventBorderRadius: 2px;
+@eventBorderRadius: 3px; // border radius applied to events of both types and header labels
 
-@allDayEventsBoxHeight: 80px;
-@scheduledEventsBoxHeight: 400px;
+@dayLabelBackgroundColor: color(rgba(20, 108, 143, 1)); // background color for day header label
 
-@allDayEventsDividerHeight: 16px;
-@allDayEventsDividerColor: #dcdcdc;
+@allDayEventsDividerHeight: 16px; // spacing between 'all day events' section and hour-grid section
+@allDayEventsDividerColor: color(#e5e5e5); // color of the line that divides both sections
 
-@gridHourHeight: 40px;
+@gridLineSeparatorColor: color(#ededed); // color of the lines that create grid (line is repeated every 1 hour)
+@gridHourFontColor: color(#808080); // font color of the label containing full hour displayed next to grid lines
+@gridHourFontSize: 10px; // font size for hour label
 
-// Styles definition
+// .icalrender gives scope to the styles provided by this library, so they don't interfere with other styles on a webpage
 .icalrender {
-    .month {
-    }
-
-    .week {
-    }
-
-    .day {
-        .all-day-events {
-            max-height: @allDayEventsBoxHeight;
-            overflow-y: scroll;
-        }
-
-        .all-day-events-divider {
-            margin-top: @allDayEventsDividerHeight/2;
-            margin-bottom: @allDayEventsDividerHeight/2;
-            height: 1px;
-            background-color: @allDayEventsDividerColor;
-        }
-
-        .scheduled-events {
-            max-height: @scheduledEventsBoxHeight;
-            overflow-y:scroll;
-            overflow-x: hidden;
-            position: relative;
-            // Events that have a start and end time set should be displayed on a time-grid representing time intervals during the day
-            & > .time-grid {
-                z-index: 10;
-
-                & > .time-grid-line {
-                    background-color: #ededed;
-                    height: 1px;
-                    margin-top: @gridHourHeight;
-                }
-            }
-
-            .event {
-                //position: absolute;
-                //top: (@gridHourHeight + 1px)*4;
-                overflow: hidden;
-
+    font-size: @generalFontSize;
+    // currently multi-day view is the only one supported in library, so the .day class is main one
+    .days {
+        .headers {
+            position: relative; // because position of labels inside needs to be calculated in JS, as the JS API allows to specify margins and other options.
+            height: 27px; // height of the labels section
+            .day-label {
+                // single label with day nbame and date
+                box-sizing: border-box;
+                padding: @eventPadding;
+                background-color: @dayLabelBackgroundColor;
+                border-radius: @eventBorderRadius;
+                color: contrast(@dayLabelBackgroundColor);
+                font-weight: bold;
+                white-space: nowrap;
+                cursor: default;
             }
         }
 
         .event {
-            background-color: @eventBackgroundColor;
-            border: 1px solid @eventBorderColor;
-            color: @eventTextColor;
-            margin-bottom: @eventMarginBottom;
             padding: @eventPadding;
+            background-color: @eventBackgroundColor;
             border-radius: @eventBorderRadius;
+            color: @eventTextColor;
             font-weight: bold;
-
             box-sizing: border-box;
+            cursor: default;
+            overflow: hidden;
+        }
+
+        .all-day-events {
+            position: relative; // position needs to be calculated in JS (because of support for multi-day view in a single container), so relative positioning fits best
+            overflow-x: hidden; // correct calculation on JS side should never lead to overflow in X axis. This rule hides disabled horizontal scrollbar which is visible otherwise
+            overflow-y: auto; // number of all-day events depends on data, and the might not fit in the area, so scrollbar might be needed sometimes
+        }
+
+        .all-day-events-divider {
+            background-color: @allDayEventsDividerColor;
+            height: 1px;
+            margin-top: @allDayEventsDividerHeight/2;
+            margin-bottom: @allDayEventsDividerHeight/2;
+        }
+
+        .scheduled-events {
+            overflow-x: hidden; // correct calculation on JS side should never lead to overflow in X axis. This rule hides disabled horizontal scrollbar which is visible otherwise
+            overflow-y: auto; // depending on view's settings, container might be able to display all data, or scrollbar might be needed
+            position: relative;
+            padding-top: 5px;
+            
+            & > .time-grid {
+                // Events that have a start and end time set should be displayed on a time-grid representing time intervals during the day
+                & > .time-grid-line {
+                    background-color: @gridLineSeparatorColor;
+                    height: 1px;
+                }
+
+                & > .time-grid-end-spacing {
+                    height: 10px;
+                }
+
+                & > .time-grid-hour {
+                    position: absolute;
+                    font-size: @gridHourFontSize;
+                    color: @gridHourFontColor;
+                    background-color: #fff;
+                }
+            }
         }
     }
 }

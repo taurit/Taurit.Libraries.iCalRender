@@ -1,45 +1,65 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <title>iCalRender sample</title>
     <meta charset="utf-8" />
-    <link href="iCalStyles.min.css" rel="stylesheet" />
-    <link href="SamplePageStyles.min.css" rel="stylesheet" />
+
+    <!-- Stylesheet for a library, must me attached or replaced by similar stylesheet: -->
+    <link href="iCalStyles.css" rel="stylesheet" />
+
+    <!-- Stylesheet for a demo page, unimportant: -->
+    <link href="SamplePageStyles.css" rel="stylesheet" />
 </head>
+
 <body>
     <div class="icalrender">
-        <div class="week">
-            <div id="renderedDay1" class="day">
-                <!-- Placeholder for contents of rendered single day -->
-            </div>
+        <!-- 'icalrender' CSS class allows to limit scope of library-specific CSS selectors -->
 
-           
+        <h1>iCalRender multiday view: usage examples</h1>
+
+        <h2>View #1: single day</h2>
+        <div id="one-day" class="sample-page-placeholder sample-page-placeholder-1">
+            <!-- Placeholder for contents of rendered single day -->
         </div>
 
+        <h2>View #2: 3 days</h2>
+        <div id="three-days" class="sample-page-placeholder sample-page-placeholder-3">
+            <!-- Placeholder for contents of rendered 3 days -->
+        </div>
+
+        <h2>View #2: 7 days</h2>
+        <div id="seven-days" class="sample-page-placeholder sample-page-placeholder-7">
+            <!-- Placeholder for contents of rendered 7 days -->
+        </div>
+
+        <h2>See more</h2>
+        <ul>
+            <li><a href="http://icalrender.taurit.pl/">http://icalrender.taurit.pl</a></li>
+            <li><a href="https://github.com/taurit/iCalRender">https://github.com/taurit/iCalRender</a></li>
+        </ul>
     </div>
 
     <script src="Scripts/ical.js"></script>
     <script src="Scripts/EventPositionCalculator.js"></script>
     <script src="Scripts/iCalRender.js"></script>
     <script src="Scripts/jquery-2.1.4.js"></script>
-    <script src="Scripts/i18next-1.8.0.min.js"></script>
     <script type="text/javascript">
         /// <reference path="Scripts/jquery-2.1.4.js" />
-
-
+        
         $.get("http://localhost:49762/samples/Cal-2015-08-22.ics", function (response) {
-            fileContent = response;
+            var fileContent = response;
+            
+            // example: view for hours 10:00-19:00
+            var renderer = new ICalRender.Renderer(fileContent, 10, 19, 52);
+            renderer.RenderMultidayView("#one-day", 2015, 8, 22);
 
-            var renderer = new ICalRender.Renderer(fileContent);
-            var renderCode = renderer.RenderDay(2015, 8, 22); // google_birthday.ics has an event on 2014-12-10
-            jQuery("#renderedDay1").append(renderCode);
+            // example: views for hours 08:00-22:00
+            var renderer2 = new ICalRender.Renderer(fileContent, 12, 24);
+            renderer2.RenderMultidayView("#three-days", 2015, 8, 22, 3);
+            renderer2.RenderMultidayView("#seven-days", 2015, 8, 22, 7);
 
-            renderer.RealignDays(".week");
-            // localization example
-            /*i18n.init(function (err, t) {
-                $("#renderedDay1").i18n();
-            });*/
-
+          
         });
 
     </script>

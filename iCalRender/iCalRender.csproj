@@ -66,6 +66,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="gulpfile.js" />
     <Content Include="iCalStyles.css">
       <DependentUpon>iCalStyles.less</DependentUpon>
     </Content>

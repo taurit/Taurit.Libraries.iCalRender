@@ -2,10 +2,56 @@
 // Totally unrelated to iCalRender plugin, only for demonstrarion purposes.
 
 body {
-    font-family: Verdana, Arial, sans-serif;
-    font-size: 12px;
+    font-family: Tahoma,Helvetica,Sans-Serif;
+    background-color: #145169;
+    padding: 20px;
 
-    .day {
-        width: 200px;
+    h1, h2 {
+        text-align: center;
+        color: contrast(color(#29aee1));
+        padding: 5px;
+        font-weight: 300 !important;
+        font-family: "Segoe UI Light", "Segoe UI", Tahoma, Helvetica, sans-serif;
+        margin: 0;
+    }
+
+    h1 {
+        background-color: color(rgba(20, 108, 143, 1));
+        padding: 20px;
+    }
+
+    h2 {
+        background-color: color(#29AEE1);
+        padding: 10px;
+        border-top: 20px solid color(rgba(20, 108, 143, 1));
+    }
+
+    .icalrender {
+        background-color: #fff;
+        margin: 0 auto;
+        width: 80%;
+
+        border: 10px solid color(rgba(20, 108, 143, 1));; 
+    } 
+
+}
+
+
+.sample-page-placeholder {
+    margin: 30px auto 30px auto;
+
+    &.sample-page-placeholder-1 {
+        width: 25%; // relative to viewport width, so responsiveness can be checked
+        height: 400px;
+    }
+
+    &.sample-page-placeholder-3 {
+        width: 50%;
+        height: 400px;
+    }
+
+    &.sample-page-placeholder-7 {
+        width: 87%;
+        height: 400px;
     }
 }

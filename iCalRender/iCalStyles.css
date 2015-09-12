@@ -1,37 +1,57 @@
-﻿.icalrender .day .all-day-events {
-  max-height: 80px;
-  overflow-y: scroll;
+.icalrender {
+  font-size: 13px;
 }
-.icalrender .day .all-day-events-divider {
-  margin-top: 8px;
-  margin-bottom: 8px;
-  height: 1px;
-  background-color: #dcdcdc;
-}
-.icalrender .day .scheduled-events {
-  max-height: 400px;
-  overflow-y: scroll;
-  overflow-x: hidden;
+.icalrender .days .headers {
   position: relative;
+  height: 27px;
 }
-.icalrender .day .scheduled-events > .time-grid {
-  z-index: 10;
-}
-.icalrender .day .scheduled-events > .time-grid > .time-grid-line {
-  background-color: #ededed;
-  height: 1px;
-  margin-top: 40px;
-}
-.icalrender .day .scheduled-events .event {
-  overflow: hidden;
-}
-.icalrender .day .event {
-  background-color: #3d9970;
-  border: 1px solid #3d9970;
-  color: #ffffff;
-  margin-bottom: 3px;
+.icalrender .days .headers .day-label {
+  box-sizing: border-box;
   padding: 3px 5px 3px 5px;
-  border-radius: 2px;
+  background-color: #146c8f;
+  border-radius: 3px;
+  color: #ffffff;
+  font-weight: bold;
+  white-space: nowrap;
+  cursor: default;
+}
+.icalrender .days .event {
+  padding: 3px 5px 3px 5px;
+  background-color: #29aee1;
+  border-radius: 3px;
+  color: #ffffff;
   font-weight: bold;
   box-sizing: border-box;
+  cursor: default;
+  overflow: hidden;
+}
+.icalrender .days .all-day-events {
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.icalrender .days .all-day-events-divider {
+  background-color: #e5e5e5;
+  height: 1px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.icalrender .days .scheduled-events {
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+  padding-top: 5px;
+}
+.icalrender .days .scheduled-events > .time-grid > .time-grid-line {
+  background-color: #ededed;
+  height: 1px;
+}
+.icalrender .days .scheduled-events > .time-grid > .time-grid-end-spacing {
+  height: 10px;
+}
+.icalrender .days .scheduled-events > .time-grid > .time-grid-hour {
+  position: absolute;
+  font-size: 10px;
+  color: #808080;
+  background-color: #fff;
 }

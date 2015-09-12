@@ -1,7 +1,44 @@
-﻿body {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 12px;
+body {
+  font-family: Tahoma, Helvetica, Sans-Serif;
+  background-color: #145169;
+  padding: 20px;
 }
-body .day {
-  width: 200px;
+body h1,
+body h2 {
+  text-align: center;
+  color: #ffffff;
+  padding: 5px;
+  font-weight: 300 !important;
+  font-family: "Segoe UI Light", "Segoe UI", Tahoma, Helvetica, sans-serif;
+  margin: 0;
+}
+body h1 {
+  background-color: #146c8f;
+  padding: 20px;
+}
+body h2 {
+  background-color: #29aee1;
+  padding: 10px;
+  border-top: 20px solid #146c8f;
+}
+body .icalrender {
+  background-color: #fff;
+  margin: 0 auto;
+  width: 80%;
+  border: 10px solid #146c8f;
+}
+.sample-page-placeholder {
+  margin: 30px auto 30px auto;
+}
+.sample-page-placeholder.sample-page-placeholder-1 {
+  width: 25%;
+  height: 400px;
+}
+.sample-page-placeholder.sample-page-placeholder-3 {
+  width: 50%;
+  height: 400px;
+}
+.sample-page-placeholder.sample-page-placeholder-7 {
+  width: 87%;
+  height: 400px;
 }
