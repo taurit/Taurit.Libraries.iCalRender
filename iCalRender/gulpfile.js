@@ -5,12 +5,18 @@ var cssmin = require('gulp-cssmin');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
+var plumber = require('gulp-plumber');
+var autoprefixer = require('gulp-autoprefixer');
 var stripDebug = require('gulp-strip-debug');
 var es = require('event-stream');
 
 gulp.task('libStyles', function () {
     return gulp.src(['Styles/iCalStyles.less'])
+      .pipe(plumber())
       .pipe(less())
+      .pipe(autoprefixer({
+          browsers: ['last 4 versions', 'ie 8', 'ie 9', '> 1%']
+      }))
       .pipe(cssmin())
       .pipe(rename({ suffix: '.min' }))
       .pipe(gulp.dest('./build'));
@@ -19,7 +25,11 @@ gulp.task('libStyles', function () {
 
 gulp.task('exampleStyles', function () {
     return gulp.src(['Examples/Examples.less'])
+      .pipe(plumber())
       .pipe(less())
+      .pipe(autoprefixer({
+          browsers: ['last 4 versions', 'ie 8', 'ie 9', '> 1%']
+      }))
       .pipe(cssmin())
       .pipe(rename({ suffix: '.min' }))
       .pipe(gulp.dest('./Examples'));
@@ -32,6 +42,7 @@ gulp.task('libScripts', function () {
         gulp.src(['Scripts/iCalRender.Header.js', 'Scripts/iCalRender.Functions.js', 'Scripts/iCalRender.ExtendedEvent.js', 'Scripts/iCalRender.EventPositionCalculator.js', 'Scripts/iCalRender.Renderer.js'])
           .pipe(concat('icalrender.js'))
           .pipe(stripDebug())
+          .pipe(gulp.dest('./build'))
           .pipe(uglify())
           .pipe(rename({ suffix: '.min' }))
           .pipe(gulp.dest('./build'))
